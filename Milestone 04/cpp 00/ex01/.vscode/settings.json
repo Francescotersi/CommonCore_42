@@ -52,6 +52,7 @@
 		"stop_token": "cpp",
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
-		"semaphore": "cpp"
+		"semaphore": "cpp",
+		"xstring": "cpp"
 	}
 }
