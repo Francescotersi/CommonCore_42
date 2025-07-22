@@ -1,3 +1,4 @@
+#include "HumanA.hpp"
 #include "Weapon.hpp"
 #include <string>
 #include <iostream>

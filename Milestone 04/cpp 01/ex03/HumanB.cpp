@@ -1,4 +1,5 @@
 #include "HumanB.hpp"
+#include <iostream>
 
 HumanB::HumanB(std::string name)
 {
@@ -12,7 +13,7 @@ HumanB::~HumanB()
     return ;
 }
 
-void    HumanB::setWeapon(Weapon weapon)
+void    HumanB::setWeapon(Weapon &weapon)
 {
     this->weapon = &weapon;
 }
