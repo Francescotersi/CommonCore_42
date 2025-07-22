@@ -43,6 +43,9 @@ int main(int argc, char **argv)
 		return (std::cout <<
 			"Please give 1)Filename, 2)String to search, 3)String to replace" <<
 			std::endl, 1);
+	std::string temp = argv[2];
+	if (temp == "")
+		return (std::cout << "non puoi scarso!!!!!" << std::endl, 1);
 	if (!file.is_open())
 		return (std::cout <<
 			"Could not open the file (I AM THE ONE WHO KNOCKS!)" <<

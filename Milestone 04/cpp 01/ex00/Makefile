@@ -3,9 +3,10 @@ CPP = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
 FILES = main.cpp \
+		Zombie.cpp \
 		newZombie.cpp \
-		randomChump.cpp \
-		Zombie.cpp
+		randomChump.cpp 
+		
 
 OBJ = $(FILES:.cpp=.o)
 

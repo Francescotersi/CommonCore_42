@@ -9,7 +9,7 @@ int main()
     std::string &reference = brain;
 
     std::cout << "Memory addr of the string var = "<< &brain << std::endl;
-    std::cout << "Memory addr of the pointer to the string = " << &pointer << std::endl;
+    std::cout << "Memory addr of the pointer to the string = " << pointer << std::endl;
     std::cout << "Memory addr of the reference of the string = " << &reference << std::endl;
 
     std::cout << "Value of the string var = " << brain << std::endl;
