@@ -8,18 +8,18 @@
 int main()
 {
     {
-        Weapon club = Weapon("crude spiked club");
-        HumanA bob("Bob", club);
+        Weapon club = Weapon("Long sword");
+        HumanA bob("Henry", club);
         bob.attack();
-        club.setType("some other type of club");
+        club.setType("some other type of sword");
         bob.attack();
     }
     {
-        Weapon club = Weapon("crude spiked club");
-        HumanB jim("Jim");
+        Weapon club = Weapon("Long bow");
+        HumanB jim("Hans Capon");
         jim.setWeapon(club);
         jim.attack();
-        club.setType("some other type of club");
+        club.setType("some other type of bow");
         jim.attack();
         return 0;
     }
