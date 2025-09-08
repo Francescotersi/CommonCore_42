@@ -1,23 +1,23 @@
-NAME = sed_is_for_losers
+NAME = bsp
 CPP = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98 -g
+FLAGS = -Wall -Wextra -Werror -std=c++98
 
-FILES = main.cpp
+FILES = main.cpp Fixed.cpp Point.cpp bsp.cpp
 
 OBJ = $(FILES:.cpp=.o)
 
 all : $(NAME)
 
 $(NAME): $(OBJ)
-	@echo SOLID SNAKE
+	@echo HENRY
 	$(CPP) $(FLAGS) $(OBJ) -o $(NAME)
 
 clean:
-	@echo MERYL
+	@echo SIR RODZIG
 	rm -f $(OBJ)
 
 fclean: clean
-	@echo COLONEL
+	@echo HANS CAPON
 	rm -f $(NAME)
 
 re : fclean all

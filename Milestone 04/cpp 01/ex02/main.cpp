@@ -1,7 +1,7 @@
 #include <iostream> 
 
-// reference are more secure cause you cant go out of memory
-// while with pointer you can go out of memory cause you can change the their value
+// reference are more secure cause can't be inizialized to NULL
+// while with pointer can be initialized to NULL
 int main()
 {
     std::string brain = "HI THIS IS BRAIN";

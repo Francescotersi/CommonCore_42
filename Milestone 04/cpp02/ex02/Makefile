@@ -1,23 +1,23 @@
-NAME = sed_is_for_losers
+NAME = Towards_a_more_useful_fixed-point_number_class
 CPP = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98 -g
+FLAGS = -Wall -Wextra -Werror -std=c++98
 
-FILES = main.cpp
+FILES = main.cpp Fixed.cpp
 
 OBJ = $(FILES:.cpp=.o)
 
 all : $(NAME)
 
 $(NAME): $(OBJ)
-	@echo SOLID SNAKE
+	@echo HENRY
 	$(CPP) $(FLAGS) $(OBJ) -o $(NAME)
 
 clean:
-	@echo MERYL
+	@echo SIR RODZIG
 	rm -f $(OBJ)
 
 fclean: clean
-	@echo COLONEL
+	@echo HANS CAPON
 	rm -f $(NAME)
 
 re : fclean all

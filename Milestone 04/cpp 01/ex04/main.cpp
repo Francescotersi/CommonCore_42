@@ -32,7 +32,6 @@ bool	putInNewFile(std::string result, char **argv)
 
 int main(int argc, char **argv)
 {
-	std::fstream	file(argv[1]);
 	std::string		strToSearch = argv[2];
 	std::string		strToInsert = argv[3];
 	std::string		line;
@@ -43,6 +42,7 @@ int main(int argc, char **argv)
 		return (std::cout <<
 			"Please give 1)Filename, 2)String to search, 3)String to replace" <<
 			std::endl, 1);
+	std::fstream	file(argv[1]);
 	std::string temp = argv[2];
 	if (temp == "")
 		return (std::cout << "non puoi scarso!!!!!" << std::endl, 1);

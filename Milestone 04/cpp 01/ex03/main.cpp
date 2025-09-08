@@ -4,7 +4,8 @@
 #include "HumanA.hpp"
 #include "HumanB.hpp" 
 
-
+// usa & qunado deve esistere necessariamente
+// usa * qunado non deve necessariamente esistere pero` deve essere inizializzato a NULL
 int main()
 {
     {
