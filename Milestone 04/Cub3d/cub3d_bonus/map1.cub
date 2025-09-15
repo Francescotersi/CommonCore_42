@@ -6,7 +6,7 @@ D2 ./sprites/door.xpm
 D1 ./sprites/door_2.xpm
 
 
-    F 79, 148, 68
+F 79, 148, 68
 C 68, 143, 148
 
 

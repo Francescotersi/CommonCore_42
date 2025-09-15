@@ -119,6 +119,11 @@ void	check_map(char *str, int fd, t_data *gen)
 	{
 		free(str2);
 		str2 = get_next_line_bonus(fd);
+		if (!str2)
+		{
+			free_all(gen);
+			error_print("Map is missing");
+		}
 	}
 	gen->gen_ptr = ft_strdup(str);
 	gen->map = alloc_map(fd, str2, gen);
