@@ -1,6 +1,6 @@
-NAME = 
+NAME = Form_up_maggots_!
 
-SRC = main.cpp
+SRC = main.cpp Bureaucrat.cpp Form.cpp
 
 RM = rm -rf
 CC = c++
