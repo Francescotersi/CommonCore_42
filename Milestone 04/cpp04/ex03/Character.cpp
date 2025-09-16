@@ -8,12 +8,12 @@ Character::Character(std::string name) : name(name)
 		this->spells[i] = NULL;
 }
 
-Character::Character(const Character& other)
+Character::Character(const Character& other) : name(other.name)
 {
 	std::cout << "Character has beed constructed from a copy\n";
 	for (int i = 0; i < 4; i++)
 		if (other.spells[i])
-			this->spells[i] = other.spells[i];
+			this->spells[i] = other.spells[i]->clone();
 		else
 			this->spells[i] = NULL;
 }
@@ -24,7 +24,8 @@ Character& Character::operator=(const Character& other)
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			delete this->spells[i];
+			if (this->spells[i])
+				delete this->spells[i];
 			this->spells[i] = NULL;
 		}
 		this->name = other.name;
@@ -65,6 +66,7 @@ void Character::equip(AMateria* m)
 			return;
 		}
 	}
+	std::cout << "Cannot equip materia: inventory is full" << std::endl;
 }
 
 void Character::unequip(int idx)

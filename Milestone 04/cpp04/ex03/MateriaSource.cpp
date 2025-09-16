@@ -41,7 +41,7 @@ void MateriaSource::learnMateria(AMateria *m)
 {
 	int i = 0;
 
-	while ((this->inventory)[i] != 0 && i < 4)
+	while (i < 4 && (this->inventory)[i] != 0)
 		i++;
 	if (i >= 4)
 	{
@@ -56,7 +56,7 @@ AMateria* MateriaSource::createMateria(std::string const & type)
 {
 	int i = 0;
 
-	while ((this->inventory)[i] && ((this->inventory)[i])->getType() != type && i < 4)
+	while (i < 4 && (this->inventory)[i] && ((this->inventory)[i])->getType() != type)
 		i++;
 	if (i >= 4 || !(this->inventory)[i])
 	{

@@ -50,7 +50,9 @@ int main()
 
     // Test 5: Unequipping materias
     std::cout << "\n--- Test 5: Unequipping Materias ---" << std::endl;
+    AMateria* unequippedMateria = static_cast<Character*>(wizard)->getSpell(1); // Get the materia before unequipping
     wizard->unequip(1); // Should unequip cure
+    delete unequippedMateria; // Delete the unequipped materia
     wizard->unequip(1); // Should say nothing equipped
     wizard->unequip(-1); // Invalid index
     wizard->unequip(10); // Invalid index
@@ -68,6 +70,8 @@ int main()
     
     tmp = src->createMateria("cure");
     wizard->equip(tmp); // Should not equip (inventory full)
+    // Since wizard's inventory is full and equip failed, we need to delete the materia
+    delete tmp;
 
     // Test 8: Character copy (testing deep copy)
     std::cout << "\n--- Test 8: Character Copy Test ---" << std::endl;
@@ -114,7 +118,10 @@ int main()
     fullSource->learnMateria(new Cure());
     fullSource->learnMateria(new Ice());
     fullSource->learnMateria(new Cure());
-    fullSource->learnMateria(new Ice()); // Should not learn (full)
+    AMateria* extraMateria = new Ice();
+    fullSource->learnMateria(extraMateria); // Should not learn (full)
+    // Since learnMateria failed, we need to delete the materia
+    delete extraMateria;
 
     // Cleanup
     std::cout << "\n--- Cleanup ---" << std::endl;
