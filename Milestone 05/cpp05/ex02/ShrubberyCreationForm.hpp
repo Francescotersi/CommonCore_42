@@ -5,19 +5,21 @@
 #include <fstream>
 #include "AForm.hpp"
 
+class Bureaucrat;
+
 class ShrubberyCreationForm : public AForm
 {
 	private:
-		Bureaucrat& target;
+		std::string target;
 
 	public:
-		ShrubberyCreationForm(Bureaucrat& target);
+		ShrubberyCreationForm(std::string target);
 		ShrubberyCreationForm(const ShrubberyCreationForm& other);
 		ShrubberyCreationForm& operator=(const ShrubberyCreationForm& other);
 		~ShrubberyCreationForm();
 
-		Bureaucrat& getTarget() const ;
-		void createTreeFile() const ;
+		std::string getTarget() const ;
+		void execute(Bureaucrat const & executor) const;
 };
 
 #endif

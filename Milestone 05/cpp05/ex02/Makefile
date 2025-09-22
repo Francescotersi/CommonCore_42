@@ -1,6 +1,6 @@
-NAME = 
+NAME = forms
 
-SRC = main.cpp
+SRC = main.cpp Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyCreationForm.cpp
 
 RM = rm -rf
 CC = c++

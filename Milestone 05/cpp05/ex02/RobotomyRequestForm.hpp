@@ -5,19 +5,21 @@
 #include <cstdlib>
 #include "AForm.hpp"
 
+class Bureaucrat;
+
 class RobotomyRequestForm : public AForm
 {
 	private:
-		Bureaucrat& target;
+		std::string target;
 
 	public:
-		RobotomyRequestForm(Bureaucrat& target);
+		RobotomyRequestForm(std::string target);
 		RobotomyRequestForm(const RobotomyRequestForm& other);
 		RobotomyRequestForm& operator=(const RobotomyRequestForm& other);
 		~RobotomyRequestForm();
 
-		Bureaucrat& getTarget() const ;
-		void randomRobotomize();
+		std::string getTarget() const ;
+		void execute(Bureaucrat const & executor) const;
 };
 
 #endif

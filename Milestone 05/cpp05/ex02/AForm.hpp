@@ -2,7 +2,6 @@
 # define FORM_HPP
 
 #include <iostream>
-#include "Bureaucrat.hpp"
 
 class Bureaucrat;
 
@@ -26,6 +25,8 @@ class AForm
 		int getGradeToSign() const ;
 		int getGradeToExec() const ;
 
+		virtual void execute(Bureaucrat const & executor) const = 0;
+
 		void beSigned(Bureaucrat& bureaucrat);
 
 		class GradeTooHighException : public std::exception
@@ -47,9 +48,18 @@ class AForm
 				return "Grade of the form is too low";
 			}
 		};
+
+		class GradeTooLowToExecute : public std::exception
+		{
+		public:
+			const char* what() const throw()
+			{
+				return "Grade to low to execute";
+			}
+		};
 };
 
-std::ostream& operator<<(std::ostream& output, const Form& Form);
+std::ostream& operator<<(std::ostream& output, const AForm& Form);
 
 
 #endif
