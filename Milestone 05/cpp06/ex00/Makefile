@@ -1,6 +1,6 @@
 NAME = cast
 
-SRC = main.cpp ScalarConverter.cpp
+SRC = main.cpp ScalarConverter.cpp converter.cpp
 
 RM = rm -rf
 CC = c++

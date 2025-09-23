@@ -12,6 +12,7 @@ ScalarConverter::ScalarConverter(const ScalarConverter& other)
 
 ScalarConverter& ScalarConverter::operator=(const ScalarConverter& other)
 {
+	(void)other;
 	return *this;
 }
 
@@ -20,12 +21,41 @@ ScalarConverter::~ScalarConverter()
 
 void ScalarConverter::convert(std::string input)
 {
-	for (int i = 0; i < input.length(); i++)
+	if (input == "-inf" || input == "-inff")
 	{
-		if (!std::isprint(input[i]))
-			std::cout << "Input contains characters that are not printable" << std::endl;
+		std::cout << "char : impossible" << std::endl;
+		std::cout << "int : impossible" << std::endl;
+		std::cout << "float : -inff" << std::endl;
+		std::cout << "double : -inf" << std::endl;
+		return ;
 	}
+	else if (input == "inf" || input == "inff")
+	{
+		std::cout << "char : impossible" << std::endl;
+		std::cout << "int : impossible" << std::endl;
+		std::cout << "float : inff" << std::endl;
+		std::cout << "double : inf" << std::endl;
+		return ;
+	}
+	else if (input == "nan" || input == "nanf")
+	{
+		std::cout << "char : impossible" << std::endl;
+		std::cout << "int : impossible" << std::endl;
+		std::cout << "float : nanf" << std::endl;
+		std::cout << "double : nan" << std::endl;
+		return ;
+	}
+
+	if (parsInput(input) == true)
+	{
+		std::cout << "Wrong Input" << std::endl;
+		return ;
+	}
+
 	toChar(input);
+	toInt(input);
+	toFloat(input);
+	toDouble(input);
 }
 
 

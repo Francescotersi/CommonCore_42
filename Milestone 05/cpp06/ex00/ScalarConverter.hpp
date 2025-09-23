@@ -1,8 +1,12 @@
-#ifndef SCALARCONVERTER.HPP
-# define SCALARCONVERTER.HPP
+#ifndef SCALARCONVERTER_HPP
+# define SCALARCONVERTER_HPP
 
 #include <iostream>
-#include <cctype>
+#include <string>
+#include <cstdlib>
+#include <climits>
+#include <iomanip>
+
 
 class ScalarConverter
 {
@@ -21,5 +25,7 @@ void toChar(std::string input);
 void toInt(std::string input);
 void toFloat(std::string input);
 void toDouble(std::string input);
+
+bool parsInput(std::string input);
 
 #endif
