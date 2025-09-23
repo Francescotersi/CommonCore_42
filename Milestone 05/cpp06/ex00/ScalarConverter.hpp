@@ -22,9 +22,9 @@ class ScalarConverter
 };
 
 void toChar(std::string input);
-void toInt(std::string input);
-void toFloat(std::string input);
-void toDouble(std::string input);
+void toInt(std::string input, bool isLetter);
+void toFloat(std::string input, bool isLetter);
+void toDouble(std::string input, bool isLetter);
 
 bool parsInput(std::string input);
 

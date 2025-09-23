@@ -10,10 +10,9 @@ Bureaucrat::Bureaucrat(std::string name, int g) : name(name)
 	std::cout << "Constructing Bureaucrat named = " << name << std::endl;
 }
 
-Bureaucrat::Bureaucrat(const Bureaucrat& other)
+Bureaucrat::Bureaucrat(const Bureaucrat& other) : name(other.name)
 {
 	std::cout << "Constructing Bureaucrat named = " << name << "from a copy" << std::endl;
-	this->name = other.name;
 	this->grade = other.grade;
 }
 
@@ -21,7 +20,6 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat& other)
 {
 	if (this != &other)
 	{
-		this->name = other.name;
 		this->grade = other.grade;
 	}
 	return *this;

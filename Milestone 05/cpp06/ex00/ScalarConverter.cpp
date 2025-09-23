@@ -52,10 +52,14 @@ void ScalarConverter::convert(std::string input)
 		return ;
 	}
 
+	bool isLetter = false;
+	if ((input[0] >= 65 && input [0]<= 90) || (input[0] >= 97 && input[0] <= 122))
+		isLetter = true;
+
 	toChar(input);
-	toInt(input);
-	toFloat(input);
-	toDouble(input);
+	toInt(input, isLetter);
+	toFloat(input, isLetter);
+	toDouble(input, isLetter);
 }
 
 
