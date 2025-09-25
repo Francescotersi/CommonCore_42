@@ -1,7 +1,5 @@
 #include "ScalarConverter.hpp"
 
-// guarda come funzionano i cast senno non riesci a fare nulla rincoglionito di merda
-
 ScalarConverter::ScalarConverter()
 {}
 

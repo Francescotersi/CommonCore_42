@@ -13,7 +13,10 @@ ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm& other)
 
 ShrubberyCreationForm& ShrubberyCreationForm::operator=(const ShrubberyCreationForm& other)
 {
-	(void)other;
+	if (this != &other)
+	{
+		this->target = other.target;
+	}
 	return *this;
 }
 

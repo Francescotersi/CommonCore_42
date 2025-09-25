@@ -56,15 +56,15 @@ void toFloat(std::string input, bool isLetter)
 	if (isLetter)
 	{
 		float number = static_cast<float>(input[0]);
-        std::cout << "float: " << std::fixed << std::setprecision(1) << number << "f" << std::endl;
+		std::cout << "float: " << std::fixed << std::setprecision(1) << number << "f" << std::endl;
 		return ;
 	}
 	float number = static_cast<float>(std::atof(input.c_str()));
 
-    if (number == static_cast<int>(number))
-        std::cout << "float: " << std::fixed << std::setprecision(1) << number << "f" << std::endl;
-    else
-        std::cout << "float: " << std::setprecision(6) << number << "f" << std::endl;
+	if (number == static_cast<int>(number))
+		std::cout << "float: " << std::fixed << std::setprecision(1) << number << "f" << std::endl;
+	else
+		std::cout << "float: " << std::setprecision(6) << number << "f" << std::endl;
 }
 
 void toDouble(std::string input, bool isLetter)
@@ -72,15 +72,15 @@ void toDouble(std::string input, bool isLetter)
 	if (isLetter)
 	{
 		double number = static_cast<double>(input[0]);
-        std::cout << "double: " << std::fixed << std::setprecision(1) << number << std::endl;
+		std::cout << "double: " << std::fixed << std::setprecision(1) << number << std::endl;
 		return ;
 	}
 	double number = std::atof(input.c_str());
 
-    if (number == static_cast<int>(number))
-        std::cout << "double: " << std::fixed << std::setprecision(1) << number << std::endl;
-    else
-        std::cout << "double: " << std::setprecision(15) << number << std::endl;
+	if (number == static_cast<int>(number))
+		std::cout << "double: " << std::fixed << std::setprecision(1) << number << std::endl;
+	else
+		std::cout << "double: " << std::setprecision(15) << number << std::endl;
 }
 
 bool parsInput(std::string input)

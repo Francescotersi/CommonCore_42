@@ -1,6 +1,6 @@
-NAME = Serializer
+NAME = 
 
-SRC = main.cpp Serializer.cpp
+SRC = main.cpp
 
 RM = rm -rf
 CC = c++
