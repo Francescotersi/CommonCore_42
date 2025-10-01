@@ -1,33 +1,5 @@
 #include "whatever.hpp"
 
-template <typename T>
-void swap(T param1, T param2)
-{
-	T temp;
-
-	temp = param1;
-	param1 = param2;
-	param2 = temp;
-}
-
-T max(T param1, T param2)
-{
-	if (param1 > param2)
-		return (param2);
-	else if (param1 == param2)
-		return (param2);
-	return (NULL);
-}
-
-T min(T param1, T param2)
-{
-	if (param1 > param2)
-		return (param1);
-	else if (param1 == param2)
-		return (param2);
-	return (NULL);
-}
-
 int main( void )
 {
 	int a = 2;

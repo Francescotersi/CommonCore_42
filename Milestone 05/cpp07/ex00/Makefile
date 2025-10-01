@@ -1,4 +1,4 @@
-NAME = 
+NAME = whathever
 
 SRC = main.cpp
 
