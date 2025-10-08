@@ -1,6 +1,6 @@
-NAME = template
+NAME = container
 
-SRC = main.cpp
+SRC = main.cpp Span.cpp
 
 RM = rm -rf
 CC = c++

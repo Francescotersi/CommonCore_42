@@ -1,13 +1,19 @@
 #ifndef ARRAY_HPP
 # define ARRAY_HPP
 
+#include <ctime>
+#include <cstdlib>
+#include <cstddef>
 #include <iostream>
+#include <string>
+#include <exception>
 
 template <typename T>
 class Array
 {
 	private:
-		T array[];
+		T *array;
+		size_t arrSize;
 
 	public:
 		Array();
@@ -16,7 +22,17 @@ class Array
 		Array& operator=(const Array& other);
 		~Array();
 
-		int& operator[](size_t index);
+		class indexTooBig : public std::exception
+		{
+			public:
+				virtual const char* what() const throw()
+				{
+					return "Index is too big";
+				}
+		};
+
+		T& operator[](size_t index);
+		size_t size() const;
 
 };
 

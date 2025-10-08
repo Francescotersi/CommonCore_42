@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Array.hpp>
+#include "Array.hpp"
 
 #define MAX_VAL 750
 int main(int, char**)
@@ -33,7 +33,7 @@ int main(int, char**)
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << " primo" << '\n';
     }
     try
     {
@@ -41,7 +41,7 @@ int main(int, char**)
     }
     catch(const std::exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << " secondo" << '\n';
     }
 
     for (int i = 0; i < MAX_VAL; i++)
@@ -49,5 +49,33 @@ int main(int, char**)
         numbers[i] = rand();
     }
     delete [] mirror;//
-    return 0;
+    // return 0;
+
+    // --------------------------------------------------
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    {
+        Array<int> a;
+        try
+        {
+            (void)a[0];
+        }
+        catch(const std::exception& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    }
+    {
+        Array<int> a(3);
+        a[0] = 1; a[1] = 2; a[2] = 3;
+        Array<int> b(a);
+        Array<int> c;
+        c = a;
+        b[0] = 42;
+        c[1] = 43;
+        std::cout << a[0] << " " << a[1] << " " << a[2] << std::endl;
+        std::cout << b[0] << " " << b[1] << " " << b[2] << std::endl;
+        std::cout << c[0] << " " << c[1] << " " << c[2] << std::endl;
+    }
+
 }

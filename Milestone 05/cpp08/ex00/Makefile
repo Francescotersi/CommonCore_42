@@ -1,4 +1,4 @@
-NAME = template
+NAME = containers
 
 SRC = main.cpp
 
