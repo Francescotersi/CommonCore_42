@@ -44,22 +44,29 @@ void Span::longestSpan()
 	std::cout << "Longest span : " << i << std::endl;
 }
 
-void Span::shortestSpan() // non funziona rifallo
+void Span::shortestSpan()
 {
 	std::sort(numbers.begin(), numbers.end());
 
-	std::vector<int>::iterator end = numbers.end();
-	std::vector<int>::iterator i = numbers.begin();
-	std::vector<int>::iterator j;
-	unsigned int diff = 0;
-	unsigned int smallest = 0;
-	while (i < end)
+	std::vector<int>::iterator num1 = numbers.begin();
+	std::vector<int>::iterator num2 = num1 + 1;
+	int temp = 0;
+	int diff = -1;
+	while (num2 < numbers.end())
 	{
-		j = i + 1;
-		diff = std::abs(*i - *j);
-		if (diff < smallest)
-			smallest = diff;
-		i++;
+		temp =std::abs(*num1 - *num2);
+		if (diff == -1 || temp < diff)
+			diff = temp;
+		num1++;
+		num2++;
 	}
-	std::cout << "Shortest span :" << smallest << std::endl;
+	std::cout << "Shortest span :" << diff << std::endl;
+}
+
+void Span::generateNumbers()
+{
+	srand(time(0));
+
+	for (int i = 0; i < 10000; i++)
+		this->addNumber(rand());
 }

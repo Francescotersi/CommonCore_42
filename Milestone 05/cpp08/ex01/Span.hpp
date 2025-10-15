@@ -1,6 +1,7 @@
 #ifndef SPAN_HPP
 # define SPAN_HPP
 
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -21,6 +22,7 @@ class Span
 		void shortestSpan();
 		void longestSpan();
 
+		void generateNumbers();
 		class notEnoughNumbers : public std::exception
 		{
 			public:
