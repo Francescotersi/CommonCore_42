@@ -21,6 +21,9 @@ public:
 	iterator begin();
 	iterator end();
 
+	const_iterator begin();
+	const_iterator end();
+
 };
 
 #include "MutantStack.tpp"
