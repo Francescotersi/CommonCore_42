@@ -1,6 +1,7 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
+#include <sstream>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -13,7 +14,8 @@ class BitcoinExchange
 		std::ifstream	DataTxt;
 		std::string		CsvFilename;
 		std::string		TxtFilename;
-		
+		std::map<int, std::string>		MapTxt;
+		std::map<int, std::string>		MapCsv;
 
 	public:
 		BitcoinExchange(char *FileTxt);
@@ -21,6 +23,10 @@ class BitcoinExchange
 		BitcoinExchange& operator=(const BitcoinExchange& other);
 		~BitcoinExchange();
 
+		void FillMap();
+		void Exchange();
+
+		void CheckValidDate();
 		class ErrorMessage : public std::exception
 		{
 			private:
@@ -34,6 +40,5 @@ class BitcoinExchange
 		};
 
 };
-
 
 #endif
