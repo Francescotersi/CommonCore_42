@@ -4,8 +4,16 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <cstdlib>
 #include <fstream>
 #include <map>
+
+enum BOOL{
+	FALSE,
+	TRUE,
+	NEGATIVE,
+	TOOBIG
+};
 
 class BitcoinExchange
 {
@@ -17,14 +25,21 @@ class BitcoinExchange
 		std::map<int, std::string>		MapTxt;
 		std::map<int, std::string>		MapCsv;
 
+		float				value;
+
 	public:
 		BitcoinExchange(char *FileTxt);
 		BitcoinExchange(const BitcoinExchange& other);
 		BitcoinExchange& operator=(const BitcoinExchange& other);
 		~BitcoinExchange();
 
+		void setValue(float num);
+		float getValue();
+
 		void FillMap();
-		void Exchange();
+		void Exchange(size_t mapIndex, std::string str);
+		void Calculate(std::string buffer, std::string txtDate);
+		void CalculateLowerBound();
 
 		void CheckValidDate();
 		class ErrorMessage : public std::exception

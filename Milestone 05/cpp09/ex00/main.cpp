@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 	{
 		BitcoinExchange bitcoin(argv[1]);
 
-		bitcoin.Exchange();
+		bitcoin.CheckValidDate();
 	}
 	catch (std::exception& e)
 	{
