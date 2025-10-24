@@ -87,7 +87,7 @@ void BitcoinExchange::CheckValidDate()
 {
 	std::stringstream ss;
 	std::string str;
-	std::map<int, std::string>::const_iterator it;
+	std::map<int, std::string>::iterator it;
 
 	for (it = MapTxt.begin(); it != MapTxt.end(); ++it)
 	{
@@ -97,7 +97,7 @@ void BitcoinExchange::CheckValidDate()
 	size_t mapIndex = 0; 
 	while (std::getline(ss, str))
 	{
-		std:: cout << str << std::endl;
+		// std:: cout << str << std::endl;
 		std::string year = str.substr(0, 4);
 		std::string month = str.substr(5, 2);
 		std::string day = str.substr(8, 2);
@@ -110,7 +110,7 @@ void BitcoinExchange::CheckValidDate()
 		if (month > "12" || month < "01")
 			check = TRUE;
 
-		if (day > "31" || day < "01")
+		if (checkDayBetter(day, month) == TRUE)
 			check = TRUE;
 
 		std::size_t sep = str.find('|');
@@ -125,6 +125,8 @@ void BitcoinExchange::CheckValidDate()
 					break;
 			}
 		}
+		else
+			check = NOPIPE;
 		if (!rawValue.empty())
 			setValue(std::atof(rawValue.c_str()));
 		if (getValue() < 0)
@@ -150,23 +152,21 @@ void BitcoinExchange::CheckValidDate()
 				Exchange(mapIndex, str);
 				setValue(0);
 				break;
+			case NOPIPE:
+				setValue(0);
+				std::cout << "Error : no pipe found" << std::endl;
+				break;
 		}
 		mapIndex++;
 	}
 }
 
-// nella mappa mapCsv arriva nel punto in cui si arriva alla data uguale a str
-// oppure nella data precedente
-
-// usa       std::lower_bound(container.begin(), container.end());
-
-// output    data_da_csv => value = prodotto_moltiplicazione
 void BitcoinExchange::Exchange(size_t mapIndex, std::string str)
 {
 	(void)mapIndex;
 	std::stringstream ss;
 	std::string buffer;
-	std::map<int, std::string>::const_iterator it = MapCsv.begin();
+	std::map<int, std::string>::iterator it = MapCsv.begin();
 
 	for (it = MapCsv.begin(); it != MapCsv.end(); ++it)
 	{
@@ -175,17 +175,23 @@ void BitcoinExchange::Exchange(size_t mapIndex, std::string str)
 
 	std::string csvDate;
 	std::string txtDate = str.substr(0, 10);
+	int	found = FALSE;
 	while (std::getline(ss, buffer))
 	{
 		csvDate = buffer.substr(0, 10);
 
 		if (csvDate == txtDate)
+		{
 			Calculate(buffer, txtDate);
+			found = TRUE;
+			break;
+		}
+		else if (csvDate > txtDate)
+		{
+			CalculateLowerBound(txtDate);
+			break;
+		}
 	}
-	// CalculateLowerBound();
-	// std::lower_bound(MapCsv.begin(), MapCsv.end(), txtDate);
-
-	// FARE LOWER_BOUND ultima cosa rimanente da fare poi hai finito
 }
 
 void BitcoinExchange::Calculate(std::string buffer, std::string txtDate)
@@ -203,5 +209,32 @@ void BitcoinExchange::Calculate(std::string buffer, std::string txtDate)
 	std::cout << txtDate << " => " << getValue() << " = " << getValue() * std::atof(multiplier.c_str()) << std::endl;
 }
 
+void BitcoinExchange::CalculateLowerBound(std::string txtDate)
+{
+	std::string multiplier;
 
+	for (std::map<int, std::string>::iterator it = MapCsv.begin(); it != MapCsv.end(); it++)
+	{
+		if (it->second.substr(0, 10) > txtDate)
+		{
+			it--;
+			std::size_t sep = it->second.find(',');
+			if (sep != std::string::npos)
+				for (std::size_t k = sep + 1; k < it->second.size(); k++)
+					multiplier.push_back(it->second[k]);
+			break;
+		}
+	}
+	std::cout << txtDate << " => " << getValue() << " = " << getValue() * std::atof(multiplier.c_str()) << std::endl;
+}
 
+int BitcoinExchange::checkDayBetter(std::string day, std::string month) // controlli sui mesi no bisestili
+{
+	if ((month == "04" || month == "06" || month == "09" || month == "11") && (day >= "01" && day <= "30"))
+		return FALSE;
+	if ((month == "02") && (day >= "01" && day <= "28"))
+		return FALSE;
+	if (day >= "01" && day <= "31" && month != "02")
+		return FALSE;
+	return TRUE;
+}

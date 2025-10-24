@@ -82,6 +82,7 @@ int main( void )
 
 	std::cout << "\n--- Test 6: Chain Assignment ---" << std::endl;
 	{
+		
 		std::cout << "Creating three cats for chain assignment:" << std::endl;
 		Cat cat1, cat2, cat3;
 		

@@ -1,18 +1,19 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
-#include <sstream>
-#include <string>
 #include <iostream>
+#include <map>
+#include <string>
 #include <cstdlib>
 #include <fstream>
-#include <map>
+#include <sstream>
 
 enum BOOL{
 	FALSE,
 	TRUE,
 	NEGATIVE,
-	TOOBIG
+	TOOBIG,
+	NOPIPE
 };
 
 class BitcoinExchange
@@ -39,9 +40,10 @@ class BitcoinExchange
 		void FillMap();
 		void Exchange(size_t mapIndex, std::string str);
 		void Calculate(std::string buffer, std::string txtDate);
-		void CalculateLowerBound();
+		void CalculateLowerBound(std::string txtDate);
 
 		void CheckValidDate();
+		int checkDayBetter(std::string day, std::string month);
 		class ErrorMessage : public std::exception
 		{
 			private:

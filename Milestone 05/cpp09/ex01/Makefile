@@ -1,6 +1,6 @@
-NAME = 
+NAME = RPM
 
-SRC = main.cpp
+SRC = main.cpp RPN.cpp
 
 RM = rm -rf
 CC = c++
