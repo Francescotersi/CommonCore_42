@@ -12,18 +12,25 @@ void pars(std::string str)
 
 void invertStack(std::stack<int> *MyStack)
 {
-	int stackSize = MyStack->size();
-	int temp[stackSize];
+    std::size_t stackSize = MyStack->size();
+    if (stackSize == 0)
+        return;
 
-	for (int i = 0; i < stackSize; i++)
+    int *temp = new int[stackSize];
+
+    for (std::size_t i = 0; i < stackSize; ++i)
+    {
+        temp[i] = MyStack->top();
+        MyStack->pop();
+    }
+
+	for (std::size_t i = 0; i < stackSize; ++i)
 	{
-		temp[i] = MyStack->top();
-		MyStack->pop();
+		MyStack->push(temp[i]);
+		// std:: cout << "after : i = " << (i - 1) << " | temp = " << temp[i - 1] << std::endl;
 	}
-
-	for (int i = stackSize; i > 0; i--)
-		std::cout << "after : " << " i = " << i << " | temp = " << temp[i - 1] << std::endl;
-
+	
+    delete [] temp;
 }
 
 void fillStack(std::stack<int> *MyStack, std::string input)
@@ -61,20 +68,39 @@ void reversePolishNotation(std::stack<int> *MyStack, std::string input)
 		{
 			case '+':
 				num1 = MyStack->top();
-				MyStack->pop();               //problema di valgrind in questa parte di codice
+				MyStack->pop();
 				num2 = MyStack->top();
 				MyStack->pop();
 				MyStack->push(num1 + num2);
-				std::cout << "top = " << MyStack->top() << std::endl;
+				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
 				break ; 
-			// case '-':
-
-			// case '*':
-
-			// case '/':
-
+			case '-':
+				num1 = MyStack->top();
+				MyStack->pop();
+				num2 = MyStack->top();
+				MyStack->pop();
+				MyStack->push(num1 - num2);
+				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
+				break ; 	
+			case '*':
+				num1 = MyStack->top();
+				MyStack->pop();
+				num2 = MyStack->top();
+				MyStack->pop();
+				MyStack->push(num1 * num2);
+				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
+				break ; 
+			case '/':
+				num1 = MyStack->top();
+				MyStack->pop();
+				num2 = MyStack->top();
+				MyStack->pop();
+				MyStack->push(num1 / num2);
+				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
+				break ; 
 		}
 	}
+	std::cout << "risultato = " << MyStack->top() << std::endl;
 }
 
 int main(int argc, char **argv)

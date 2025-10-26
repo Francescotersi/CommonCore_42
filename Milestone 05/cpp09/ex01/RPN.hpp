@@ -20,4 +20,5 @@ class ErrorMessage : public std::exception
 		}
 };
 
+
 #endif
