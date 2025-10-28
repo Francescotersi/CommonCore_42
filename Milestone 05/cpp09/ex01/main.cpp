@@ -58,8 +58,6 @@ void fillStack(std::stack<int> *MyStack, std::string input)
 
 void reversePolishNotation(std::stack<int> *MyStack, std::string input)
 {
-	// (void)input;
-	// (void)MyStack;
 	for (size_t i = 0; input[i]; i++)
 	{
 		int num1 = 0;
@@ -95,7 +93,10 @@ void reversePolishNotation(std::stack<int> *MyStack, std::string input)
 				MyStack->pop();
 				num2 = MyStack->top();
 				MyStack->pop();
-				MyStack->push(num1 / num2);
+				if (num2 == 0)
+					MyStack->push(1);
+				else	
+					MyStack->push(num1 / num2);
 				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
 				break ; 
 		}

@@ -9,7 +9,7 @@ class notFound : public std::exception
 	public:
 		virtual const char* what() const throw()
 		{
-			return "Non ho trovato nulla :(";
+			return "occurrance not found :()";
 		}
 };
 

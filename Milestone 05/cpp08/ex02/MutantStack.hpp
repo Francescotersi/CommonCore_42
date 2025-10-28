@@ -21,8 +21,8 @@ public:
 	iterator begin();
 	iterator end();
 
-	const_iterator begin();
-	const_iterator end();
+	const_iterator begin() const;
+	const_iterator end() const;
 
 };
 
