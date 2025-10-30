@@ -17,8 +17,8 @@ int main(int argc, char **argv)
 		fillContainer(&vect, argv);
 		fillContainer(&deque, argv);
 
-		fordJohnsonSort(&vect);
-		fordJohnsonSort(&deque);
+		vect = fordJohnsonSort(vect);
+		deque = fordJohnsonSort(deque);
 
 		std::cout << "Vector:" << std::endl;
 		for (std::vector<int>::const_iterator it = vect.begin(); it != vect.end(); ++it)
