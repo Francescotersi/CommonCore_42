@@ -97,12 +97,24 @@ void BitcoinExchange::CheckValidDate()
 	size_t mapIndex = 0; 
 	while (std::getline(ss, str))
 	{
-		// std:: cout << str << std::endl;
+		std::string date = str.substr(0, 10);
 		std::string year = str.substr(0, 4);
 		std::string month = str.substr(5, 2);
 		std::string day = str.substr(8, 2);
 		std::string rawValue;
 		int		check = FALSE;
+
+		for (int i = 0; date[i]; i++)
+		{
+			if (date[i] != '-' && !std::isdigit(date[i]))
+			{
+				check = TRUE;
+				break ;
+			}
+		}
+		std::string dateFull = year + "-" + month + "-" + day;
+		if (dateFull < "2009-01-02")
+			check = EARLYDATE;
 
 		if (year > "9999" || year < "2009")
 			check = TRUE;
@@ -116,13 +128,18 @@ void BitcoinExchange::CheckValidDate()
 		std::size_t sep = str.find('|');
 		if (sep != std::string::npos)
 		{
-			for (std::size_t k = sep + 1; k < str.size(); k++)
+			for (std::size_t k = sep + 2; k < str.size(); k++)
 			{
 				unsigned char c = static_cast<unsigned char>(str[k]);
 				if (std::isdigit(c) || c == '.' || c == '-')
-					rawValue.push_back(str[k]);
-				else if (!rawValue.empty())
-					break;
+					rawValue.push_back(c);
+				else
+					check = TRUE;
+			}
+			for (std::size_t k = 0; k < rawValue.size(); k++)
+			{
+				if (rawValue[k] == '-' || rawValue[k] == ' ')
+					check = TRUE;
 			}
 		}
 		else
@@ -156,6 +173,10 @@ void BitcoinExchange::CheckValidDate()
 				setValue(0);
 				std::cout << "Error : no pipe found" << std::endl;
 				break;
+			case EARLYDATE:
+				setValue(0);
+				std::cout << "Error : bitcoin was not yet created" << std::endl;
+				break;
 		}
 		mapIndex++;
 	}
@@ -184,14 +205,30 @@ void BitcoinExchange::Exchange(size_t mapIndex, std::string str)
 		{
 			Calculate(buffer, txtDate);
 			found = TRUE;
-			break;
+			return ;
 		}
 		else if (csvDate > txtDate)
 		{
 			CalculateLowerBound(txtDate);
-			break;
+			return ;
 		}
+		
 	}
+	CalculateTxtOver(txtDate);
+	return ;
+}
+
+void BitcoinExchange::CalculateTxtOver(std::string txtDate)
+{
+	std::string multiplier;
+
+	std::map<int, std::string>::reverse_iterator rit = MapCsv.rbegin();
+	std::size_t sep = rit->second.find(',');
+	if (sep != std::string::npos)
+		for (std::size_t k = sep + 1; k < rit->second.size(); k++)
+			multiplier.push_back(rit->second[k]);
+	// std::cout << "multi = " << multiplier << std::endl;
+	std::cout << txtDate << " => " << getValue() << " = " << getValue() * std::atof(multiplier.c_str()) << std::endl;
 }
 
 void BitcoinExchange::Calculate(std::string buffer, std::string txtDate)

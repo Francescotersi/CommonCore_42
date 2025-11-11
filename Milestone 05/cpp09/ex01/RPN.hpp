@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
+#include <cctype>
 
 class ErrorMessage : public std::exception
 {

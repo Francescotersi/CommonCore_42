@@ -13,7 +13,8 @@ enum BOOL{
 	TRUE,
 	NEGATIVE,
 	TOOBIG,
-	NOPIPE
+	NOPIPE,
+	EARLYDATE
 };
 
 class BitcoinExchange
@@ -43,6 +44,7 @@ class BitcoinExchange
 		void CalculateLowerBound(std::string txtDate);
 
 		void CheckValidDate();
+		void CalculateTxtOver(std::string txtDate);
 		int checkDayBetter(std::string day, std::string month);
 		class ErrorMessage : public std::exception
 		{

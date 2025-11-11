@@ -10,98 +10,87 @@ void pars(std::string str)
 		throw ErrorMessage("Error : there is an impostor among us");
 }
 
-void invertStack(std::stack<int> *MyStack)
-{
-    std::size_t stackSize = MyStack->size();
-    if (stackSize == 0)
-        return;
-
-    int *temp = new int[stackSize];
-
-    for (std::size_t i = 0; i < stackSize; ++i)
-    {
-        temp[i] = MyStack->top();
-        MyStack->pop();
-    }
-
-	for (std::size_t i = 0; i < stackSize; ++i)
-	{
-		MyStack->push(temp[i]);
-		// std:: cout << "after : i = " << (i - 1) << " | temp = " << temp[i - 1] << std::endl;
-	}
-	
-    delete [] temp;
-}
-
-void fillStack(std::stack<int> *MyStack, std::string input)
+void fillStack(std::stack<float> MyStack, std::string input)
 {
 	std::stringstream ss;
 	std::string str;
 
 	int	i = 0;
+	int numbers = 0;
+	int signs = 0;
 	ss << input;
+
+	for (int i = 0; input[i]; i++)
+	{
+		if (input[i] == '+' || input[i] == '-' || input[i] == '/' || input[i] == '*')
+		{
+			signs++;
+		}
+		else if (std::isdigit(input[i]))
+			numbers++;
+	}
+	if (numbers - signs != 1)
+		throw ErrorMessage("Error : wrong numbers of signs and numbers");
+
+
 	while (std::getline(ss, str, ' '))
 	{
 		if ((i < 2) && (str == "+" || str == "-" || str == "/" || str == "*"))
 			throw ErrorMessage("Error : operator sign cant be there silly");
 		if (str == "+" || str == "-" || str == "/" || str == "*")
 			continue ;
-		pars(str);
-		MyStack->push(std::atoi(str.c_str()));
-		// std::cout << "str = " << str<< std::endl;
+		pars(str);	
+		MyStack.push(std::atoi(str.c_str()));
 		i++;
 	}
-	if (MyStack->size() < 2)
+	if (MyStack.size() < 2)
 		throw ErrorMessage("Error : input too short 😞");
-	invertStack(MyStack);
 }
 
-void reversePolishNotation(std::stack<int> *MyStack, std::string input)
+void reversePolishNotation(std::stack<float> *MyStack, std::string input)
 {
-	for (size_t i = 0; input[i]; i++)
+	for (size_t i = 0; i < input.size(); i++)
 	{
-		int num1 = 0;
-		int num2 = 0;
-		switch (input[i])
+		float num1 = 0;
+		float num2 = 0;
+
+		if (std::isdigit(input[i]))
+			MyStack->push(std::atof(&input[i]));
+		else if (input[i] == ' ')
+			continue ;
+		else
 		{
-			case '+':
-				num1 = MyStack->top();
-				MyStack->pop();
-				num2 = MyStack->top();
-				MyStack->pop();
-				MyStack->push(num1 + num2);
-				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
-				break ; 
+			num1 = MyStack->top();
+			MyStack->pop();
+			num2 = MyStack->top();
+			MyStack->pop();
+			switch (input[i])
+			{
+			case '+':	
+				MyStack->push(num2 + num1);
+				break;
 			case '-':
-				num1 = MyStack->top();
-				MyStack->pop();
-				num2 = MyStack->top();
-				MyStack->pop();
-				MyStack->push(num1 - num2);
-				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
-				break ; 	
+				MyStack->push(num2 - num1);
+				break;
 			case '*':
-				num1 = MyStack->top();
-				MyStack->pop();
-				num2 = MyStack->top();
-				MyStack->pop();
-				MyStack->push(num1 * num2);
-				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
-				break ; 
+				MyStack->push(num2 * num1);
+				break;
 			case '/':
-				num1 = MyStack->top();
-				MyStack->pop();
-				num2 = MyStack->top();
-				MyStack->pop();
-				if (num2 == 0)
-					MyStack->push(1);
-				else	
-					MyStack->push(num1 / num2);
-				std::cout << "num1 = " << num1 << " ; num2 = " << num2 << std::endl;
-				break ; 
+				if (num1 == 0)
+					throw ErrorMessage("Error : division with 0 is not possible");
+				else
+					MyStack->push(num2 / num1);
+				break;
+	
+			default:
+				break;
+			}
 		}
 	}
-	std::cout << "risultato = " << MyStack->top() << std::endl;
+	if (MyStack->size() != 1)
+		throw ErrorMessage("Error : invalid expression");
+
+	std::cout << "result => " << MyStack->top() << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -112,9 +101,9 @@ int main(int argc, char **argv)
 			throw ErrorMessage("Error : wrong number of params");
 		
 		std::string input = argv[1];
-		std::stack<int> MyStack;
+		std::stack<float> MyStack;
 
-		fillStack(&MyStack, input);
+		fillStack(MyStack, input);
 		reversePolishNotation(&MyStack, input);
 		// itera l`input quando trovi operatore esegui operazione
 		// dato che nello stack ci sono solamente numeri

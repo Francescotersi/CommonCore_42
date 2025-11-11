@@ -1,4 +1,4 @@
-NAME = RPM
+NAME = RPN
 
 SRC = main.cpp RPN.cpp
 

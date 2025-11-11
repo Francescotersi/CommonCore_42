@@ -7,7 +7,12 @@
 #include <deque>
 #include <cstdlib>
 #include <algorithm>
-
+#include <typeinfo>
+#include <iomanip>
+#include <ctime>
+#include <list>
+#include <sys/time.h>
+#include <climits>
 
 class ErrorMessage : public std::exception
 {
@@ -21,15 +26,26 @@ class ErrorMessage : public std::exception
 		}
 };
 
+void fillList(std::list<int> *list, char **argv);
+std::list<int> fordJohnsonSortList(std::list<int> container);
+std::vector<int> fordJohnsonSortVect(std::vector<int> container, std::vector<std::pair<int, int> > pairback);
+std::deque<int> fordJohnsonSortDeque(std::deque<int> container, std::deque<std::pair<int, int> > pairback);
+
 template <typename T>
 void fillContainer(T *container, char **argv)
 {
 	for (int i = 1; argv[i]; i++)
 	{
+		long temp = std::atol(argv[i]);
+		if (temp > INT_MAX)
+			throw ErrorMessage("Error : a number is out of range");
 		int number = std::atoi(argv[i]);
 		if (number < 0)
 			throw ErrorMessage("Error : found a negative number");
 		container->push_back(number);
+		for (int j = 0; argv[i][j]; j++)
+			if (!std::isdigit(argv[i][j]))
+				throw ErrorMessage("Error : something is not a number");
 	}
 
 }
@@ -60,68 +76,6 @@ T jacobstalSequence(T small)
 		finalContainer.push_back(*it);
 	return finalContainer;
 }
-
-template <typename T>
-T fordJohnsonSort(T container)
-{
-	int temp = 0;
-	switch (container.size()) // casi specifici a 1 e 2 numeri
-	{
-		case 1:
-			return container;
-		case 2:
-			if (container.front() < container.back())
-				return container;
-			temp = container.back();
-			container.pop_back();
-			container.insert(container.begin(), temp);
-			return container;
-	}
-
-
-	T big;
-	T small;
-
-	for (typename T::iterator it = container.begin(); it < container.end(); it += 2)
-	{
-		int num = *it;
-		int num2 = 0;
-
-		if (it + 1 != container.end())
-			num2 = *(it + 1);
-		else
-		{
-			small.push_back(num);
-			break;
-		}
-
-		if (num > num2)
-		{
-			big.push_back(num);
-			small.push_back(num2);
-		}
-		else
-		{
-			big.push_back(num2);
-			small.push_back(num);
-		}
-	}
-
-	if (big.size() > 1)
-		big = fordJohnsonSort(big); // ricorsione
-	
-	small = jacobstalSequence(small); // jacobstal = ordinamento dei small in modo strategico
-	
-	for (typename T::iterator it = small.begin(); it < small.end(); it++) // si mette small dentro big in modo ordinato
-	{
-		typename T::iterator position = std::lower_bound(big.begin(), big.end(), *it);
-
-		big.insert(position, *it);
-	}
-
-	return big;
-}
-
 
 
 #endif
