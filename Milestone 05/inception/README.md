@@ -61,7 +61,7 @@ This project uses **Debian** as the base for all containers to ensure a lightwei
 
 #### 2. Secrets vs Environment Variables
 * **Environment Variables:** Stored as plain text. Easy to implement but visible via `docker inspect`. Not recommended for sensitive data (passwords).
-* **Docker Secrets:** They are mounted as files inside the container (usually in `/run/secrets/`), ensuring higher security for credentials, but i have the file `/secrets` in the project.
+* **Docker Secrets:** They are mounted as files inside the container (usually in `/run/secrets/`), ensuring higher security for credentials, but i don't use Docker Secrets in the project because i have everything inside of the .
 
 #### 3. Docker Network vs Host Network
 * **Docker Network (Bridge):** Creates an isolated network where containers communicate via names. Ports are not exposed to the host unless explicitly mapped.
