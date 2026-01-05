@@ -26,21 +26,14 @@ Tutti i comandi devono essere eseguiti dalla radice del progetto tramite il **Ma
 * **Avviare il progetto:**
     Costruisce le immagini e avvia i container in background.
     ```bash
-    make
-    # oppure: make up
+    make up
     ```
 
 * **Arrestare il progetto:**
     Ferma i container mantenendo i dati salvati nei volumi.
     ```bash
-    make stop
-    # oppure: make down
-    ```
-
-* **Reset completo (Wipe):**
-    Ferma tutto ed elimina anche i dati persistenti (database e file sito).
-    ```bash
-    make fclean
+    make down
+    make delete
     ```
 
 ---
@@ -72,7 +65,7 @@ Per sicurezza, nessuna password è scritta nel codice. Tutte le credenziali si t
     * `MYSQL_USER` / `MYSQL_PASSWORD`: Credenziali che WordPress usa per connettersi al DB.
     * `MYSQL_ROOT_PASSWORD`: Password di root per MariaDB.
 
-> **Importante:** Se modifichi questo file, devi rigenerare i container con `make re` per applicare le nuove password.
+> **Importante:** Se modifichi questo file, devi rigenerare i container per applicare le nuove password.
 
 ---
 
