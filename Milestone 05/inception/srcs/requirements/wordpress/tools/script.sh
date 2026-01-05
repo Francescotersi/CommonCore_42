@@ -1,66 +1,55 @@
 #!/bin/bash
 
-cd /var/www/html
+WP_PATH=/var/www/html
 
-# scarica lo strumento a riga di comando per gestire WordPress
-if [ ! -f "/usr/local/bin/wp" ]; then
-    echo "Installazione di WP-CLI..."
-    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-    chmod +x wp-cli.phar
-    mv wp-cli.phar /usr/local/bin/wp
-fi
+// attende che MariaDB sia raggiungibile via TCP
+echo "Waiting for MariaDB to be ready to execute"
 
-# Se il file di configurazione non esiste, vuol dire che è la prima installazione
-if [ ! -f "./wp-config.php" ]; then
+until mysqladmin ping -h "mariadb" -P 3306 --silent; do
+    echo "Waiting..."
+    sleep 1
+done
+echo "MariaDB is ready to execute!"
 
-    echo "WordPress non è configurato. Inizio installazione..."
-
-    # wordPress non può installarsi se MariaDB non è pronto.
-    # usiamo un loop che prova a connettersi finché non ci riesce 
-    # in cui wdp usa ping per verificare la disponibilita del DB
-    echo "Attesa che MariaDB sia pronto..."
-    while ! mariadb-admin --host=mariadb --user=$SQL_USER --password=$SQL_PASSWORD ping --silent; do
-        sleep 2
-        echo "MariaDB non risponde ancora... riprovo..."
-    done
-    echo "MariaDB è connesso!"
-
-    # scarica i file core di WordPress nella cartella corrente
+# se manca wp-config.php, scarica e installa WordPress impostando cose di base
+# come il nome del domain e l'utente admin
+if [ ! -f "$WP_PATH/wp-config.php" ]; then
+    echo "Downloading WordPress core..."
     wp core download --allow-root
-
-    # collegamento al DB
-    wp config create \
-        --dbname=$SQL_DATABASE \
-        --dbuser=$SQL_USER \
-        --dbpass=$SQL_PASSWORD \
+    echo "Creating wp-config.php..."
+    wp config create --dbname=${WORDPRESS_DB_NAME} \
+        --dbuser=${WORDPRESS_DB_USER} \
+        --dbpass=${WORDPRESS_DB_PASSWORD} \
         --dbhost=mariadb:3306 \
         --allow-root
-
-    # Crea le tabelle nel DB e imposta l'admin
-    wp core install \
-        --url=$DOMAIN_NAME \
-        --title=$WP_TITLE \
-        --admin_user=$WP_ADMIN_USER \
-        --admin_password=$WP_ADMIN_PASSWORD \
-        --admin_email=$WP_ADMIN_EMAIL \
+    echo "Installing WordPress..."
+    wp core install --url=${DOMAIN_NAME} \
+        --title="ftersill's site" \
+        --admin_user=${WORDPRESS_ADMIN_USER} \
+        --admin_password=${WORDPRESS_ADMIN_PASSWORD} \
+        --admin_email=${WORDPRESS_ADMIN_EMAIL} \
         --allow-root
-
-    # --- 7. Creazione Utente Secondario (Richiesto dal subject) ---
-    # Crea un utente editor/autore che non sia admin
-    wp user create \
-        $WP_USER \
-        $WP_EMAIL \
-        --user_pass=$WP_PASSWORD \
-        --role=author \
-        --allow-root
-    
-    echo "WordPress installato e configurato con successo!"
-
 else
-    echo "WordPress è già configurato. Salto l'installazione."
+    echo "WordPress is already installed!"
 fi
 
-# exec fa partire effettivamente il container
-# -F forza l'esecuzione in primo piano (foreground) per non far morire il container.
-echo "Avvio PHP-FPM..."
-exec /usr/sbin/php-fpm7.4 -F
+# crea utente autore se non esiste già
+if ! wp user get ${WORDPRESS_USER} --path=$WP_PATH --allow-root > /dev/null 2>&1; then
+    echo "Creating user ${WORDPRESS_USER}..."
+    wp user create ${WORDPRESS_USER} ${WORDPRESS_EMAIL} \
+    --role=author \
+    --user_pass=${WORDPRESS_PASSWORD} \
+    --path=$WP_PATH \
+    --allow-root
+else
+    echo "User ${WORDPRESS_USER} already exists."
+fi
+
+# imposta URL del sito per HTTPS
+wp option update siteurl 'https://ftersill.42.fr' --allow-root
+wp option update home 'https://ftersill.42.fr' --allow-root
+
+# avvia PHP-FPM in foreground (necessario per Docker)
+echo "Starting PHP-FPM..."
+
+exec php-fpm7.4 -F

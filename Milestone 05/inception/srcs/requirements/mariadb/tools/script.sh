@@ -1,39 +1,77 @@
-#!/bin/sh
+#!/bin/bash
 
+set -eux
 
-# avvia il servizio
-service mariadb start 
+# flag per la prima inizializzazione
+FIRST=1
 
-sleep 5
-
-# se il database esiste
-if [ ! -d "/var/lib/mysql/$SQL_DATABASE" ]; then
-
-    echo "Configurazione Iniziale MariaDB..."
-
-    # Mettiamo in sicurezza l'installazione (equivalente a mysql_secure_installation manuale)
-    mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$SQL_ROOT_PASSWORD';"
-    
-    # creiamo il database per WordPress
-    mysql -u root -p$SQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS \`$SQL_DATABASE\`;"
-
-    # creiamo l'utente per WordPress e diamo i permessi
-    # la parte con "@'%'" permette connessioni remote altrimenti wordpress 
-    # non riuscirebbe a connettersi essendo in un container diverso
-    mysql -u root -p$SQL_ROOT_PASSWORD -e "CREATE USER IF NOT EXISTS '$SQL_USER'@'%' IDENTIFIED BY '$SQL_PASSWORD';"
-    mysql -u root -p$SQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON \`$SQL_DATABASE\`.* TO '$SQL_USER'@'%';"
-    
-    # aggiorniamo i privilegi
-    mysql -u root -p$SQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
-    
-    echo "Database creato e utente configurato!"
+# inizializza datadir se mancano le tabelle di sistema
+if [ ! -d /var/lib/mysql/mysql ]; then
+    echo "Initializing MariaDB data directory"
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
 else
-    # se il database non esiste
-    echo "Il Database esiste già. Salto la configurazione."
+    echo "MariaDB data directory already initialized"
+    FIRST=0
 fi
 
-# Fermiamo il servizio temporaneo
-mysqladmin -u root -p$SQL_ROOT_PASSWORD shutdown
+# crea dir runtime e assegna permessi a mysql
+mkdir -p /var/run/mysqld
+chown -R mysql:mysql /var/run/mysqld
+chown -R mysql:mysql /var/lib/mysql
 
-# Avviamo MariaDB in modalità sicura e in primo piano (fondamentale per Docker)
-exec mysqld_safe
+# avvio temporaneo per configurazione
+echo "Starting MariaDB server"
+mysqld_safe --user=mysql --datadir=/var/lib/mysql --pid-file=/var/run/mysqld/mysqld.pid &
+pid="$!"
+
+# attende che il server risponda a ping
+echo "Waiting for MariaDB to start..."
+for i in {30..0}; do
+    if mysqladmin ping --silent; then
+        break
+    fi
+    sleep 1
+done
+
+if [ "$i" = 0 ]; then
+    echo >&2 "MariaDB did not start"
+    exit 1
+fi
+
+# se prima inizializzazione, accedi senza password; altrimenti usa root pwd
+if [ "$FIRST" -eq "1" ]; then
+    DB_PASS=""
+    echo "First time setup"
+else
+    DB_PASS="-p${MYSQL_ROOT_PASSWORD}"
+    echo "Not first time setup"
+fi
+
+# crea/aggiorna utenti e database richiesti
+echo "Setting up database and users"
+mysql -u root ${DB_PASS} <<EOSQL
+    CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+    CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+    ALTER USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+
+    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    ALTER USER '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+    FLUSH PRIVILEGES;
+EOSQL
+
+# arresta l'istanza temporanea
+mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+wait "$pid"
+
+# avvio definitivo in foreground
+echo "Starting MariaDB server"
+touch /tmp/mariadb_ready
+mysqld --user=mysql --datadir=/var/lib/mysql --pid-file=/var/run/mysqld/mysqld.pid

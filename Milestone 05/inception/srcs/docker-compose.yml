@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
     mariadb:
         build: ./requirements/mariadb
@@ -48,11 +46,11 @@ volumes:
         driver_opts:
           type: 'none'
           o: 'bind'
-          device: '/home/ftersill/data/mariadb'
+          device: '/home/francesco/data/mariadb'
 
     wordpress_volume:
         driver: local
         driver_opts:
           type: 'none'
           o: 'bind'
-          device: '/home/ftersill/data/wordpress'
+          device: '/home/francesco/data/wordpress'
