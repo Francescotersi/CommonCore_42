@@ -83,6 +83,6 @@ This project uses **Debian** as the base for all containers to ensure a lightwei
 
 ### AI Usage
 AI tools (e.g., ChatGPT/Claude) were used in this project for the following tasks:
-* **Concept Clarification:** To better understand the differences between Docker Networks and Host Networks.
+* **Concept Clarification:** To better understand how Docker works and how containers works.
 * **Debugging:** To troubleshoot syntax errors in the NGINX configuration file.
 * **Documentation:** Assistance in summarizing the technical differences between VM and Containers for this README.
