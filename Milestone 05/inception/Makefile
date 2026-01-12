@@ -8,9 +8,7 @@ up:
 	cd srcs && $(DOCKER) up $(FLAGS_BUILD)	
 
 down:
-	cd srcs && $(DOCKER) down -v && \
-	rm -rf $(WORDPRESS_VOL_PATH) && \
-	rm -rf $(MARIADB_VOL_PATH)
+	cd srcs && $(DOCKER) down -v
 
 ps:
 	cd srcs && $(DOCKER) ps
