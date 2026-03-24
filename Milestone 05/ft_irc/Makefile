@@ -1,0 +1,131 @@
+NAME		= ircserv
+
+SRCS		=   main.cpp Server.cpp \
+				User.cpp Channel.cpp \
+				ServerErrorMessage.cpp \
+				ServerLoop.cpp \
+				ServerParsing.cpp \
+				ServerReplyMessage.cpp \
+				BalatroBot/Balatro.cpp \
+				BalatroBot/BalatroGen.cpp \
+				BalatroBot/Card.cpp \
+				BalatroBot/BalatroUI.cpp \
+				BalatroBot/BalatroSelectedUI.cpp \
+				BalatroBot/PokerHand.cpp \
+				BalatroBot/BalatroShopUI.cpp \
+				BalatroBot/JokerPackUI.cpp \
+				BalatroBot/Jokers/BaseJoker/BaseJoker.cpp \
+				BalatroBot/Jokers/CleverJoker/CleverJoker.cpp \
+				BalatroBot/Jokers/CraftyJoker/CraftyJoker.cpp \
+				BalatroBot/Jokers/CrazyJoker/CrazyJoker.cpp \
+				BalatroBot/Jokers/DeviousJoker/DeviousJoker.cpp \
+				BalatroBot/Jokers/DrollJoker/DrollJoker.cpp \
+				BalatroBot/Jokers/GluttonousJoker/GluttonousJoker.cpp \
+				BalatroBot/Jokers/GreedyJoker/GreedyJoker.cpp \
+				BalatroBot/Jokers/JollyJoker/JollyJoker.cpp \
+				BalatroBot/Jokers/LustyJoker/LustyJoker.cpp \
+				BalatroBot/Jokers/MadJoker/MadJoker.cpp \
+				BalatroBot/Jokers/SlyJoker/SlyJoker.cpp \
+				BalatroBot/Jokers/WilyJoker/WilyJoker.cpp \
+				BalatroBot/Jokers/WrathfulJoker/WrathfulJoker.cpp \
+				BalatroBot/Jokers/ZanyJoker/ZanyJoker.cpp \
+				BalatroBot/Jokers/TheDuoJoker/TheDuoJoker.cpp \
+				BalatroBot/Jokers/TheTrioJoker/TheTrioJoker.cpp \
+				BalatroBot/Jokers/TheFamilyJoker/TheFamilyJoker.cpp \
+				BalatroBot/Jokers/TheOrderJoker/TheOrderJoker.cpp \
+				BalatroBot/Jokers/TheTribeJoker/TheTribeJoker.cpp \
+				BalatroBot/Jokers/HalfJoker/HalfJoker.cpp \
+				BalatroBot/Jokers/Banner/Banner.cpp \
+				BalatroBot/Jokers/Misprint/Misprint.cpp \
+				BalatroBot/Jokers/MysticSummit/MysticSummit.cpp \
+				BalatroBot/Jokers/BlackBoard/BlackBoard.cpp \
+				BalatroBot/Jokers/BlueJoker/BlueJoker.cpp \
+				BalatroBot/Jokers/BusinessCard/BusinessCard.cpp \
+				BalatroBot/Jokers/EvenSteven/EvenSteven.cpp \
+				BalatroBot/Jokers/Fibonacci/Fibonacci.cpp \
+				BalatroBot/Jokers/OddTodd/OddTodd.cpp \
+				BalatroBot/Jokers/ScaryFace/ScaryFace.cpp \
+				BalatroBot/Jokers/Scholar/Scholar.cpp \
+				BalatroBot/Jokers/Acrobat/Acrobat.cpp \
+				BalatroBot/Jokers/BaseballCard/BaseballCard.cpp \
+				BalatroBot/Jokers/BloodStone/BloodStone.cpp \
+				BalatroBot/Jokers/BootStraps/BootStraps.cpp \
+				BalatroBot/Jokers/Bull/Bull.cpp \
+				BalatroBot/Jokers/OnixAgate/OnixAgate.cpp \
+				BalatroBot/Jokers/Photograph/Photograph.cpp \
+				BalatroBot/Jokers/ShootTheMoon/ShootTheMoon.cpp \
+				BalatroBot/Jokers/SmileyFace/SmileyFace.cpp \
+				BalatroBot/Jokers/WalkieTalkie/WalkieTalkie.cpp \
+				BalatroBot/Jokers/RoughGem/RoughGem.cpp \
+				BalatroBot/Planets/Earth/Earth.cpp \
+				BalatroBot/Planets/Mars/Mars.cpp \
+				BalatroBot/Planets/Venus/Venus.cpp \
+				BalatroBot/Planets/Mercury/Mercury.cpp \
+				BalatroBot/Planets/Jupiter/Jupiter.cpp \
+				BalatroBot/Planets/Saturn/Saturn.cpp \
+				BalatroBot/Planets/Uranus/Uranus.cpp \
+				BalatroBot/Planets/Neptune/Neptune.cpp \
+				BalatroBot/Planets/Pluto/Pluto.cpp \
+				BalatroBot/PlanetPackUI.cpp \
+
+
+
+OBJS		= $(SRCS:.cpp=.o)
+
+RM			= rm -f
+FLAGS		= -Wall -Wextra -Werror -std=c++98 -g
+COMPILER	= c++
+
+INCLUDES = -Iincludes
+
+PORTNUM = 7272
+
+PW_SERV = 1234
+
+.cpp.o:
+	$(COMPILER) $(FLAGS) $(INCLUDES) -c $< -o $@
+
+all: $(NAME)
+
+# 2. Linker (crea l'eseguibile)
+$(NAME): $(OBJS)
+	$(COMPILER) $(FLAGS) $(OBJS) -o $(NAME)
+	@echo "$(GREEN)[$(NAME)]:\t PROJECT COMPILED$(RESET)"
+
+# --- Cleanup Rules ---
+
+clean:
+	$(RM) $(OBJS)
+	@echo "$(RED)[$(NAME)]:\t CLEAN$(RESET)"
+
+fclean: clean
+	$(RM) $(NAME)
+	@echo "$(RED)[$(NAME)]:\t FCLEAN$(RESET)"
+
+re: fclean all
+
+# --- Custom/Utility Rules ---
+
+vale: re
+	make clean
+	@clear
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes ./$(NAME) $(PORTNUM) $(PW_SERV)
+push: fclean
+	if [ -d .vscode ]; then \
+		rm -rf .vscode; \
+	fi
+	bash -i -c "push"
+
+testosterone: re
+	make clean
+	@clear
+	./$(NAME) $(PORTNUM) $(PW_SERV)
+
+.PHONY: all clean fclean re vale push testosterone
+
+#COLORS
+
+GREEN=\033[0;32m
+RED=\033[0;31m
+BLUE=\033[0;34m
+RESET=\033[0m
